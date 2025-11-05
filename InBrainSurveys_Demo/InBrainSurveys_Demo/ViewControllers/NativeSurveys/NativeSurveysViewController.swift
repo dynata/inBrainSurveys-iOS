@@ -43,11 +43,8 @@ class NativeSurveysViewController: UIViewController, LoadableView {
         collectionView?.alpha = 0
         
         inBrain.nativeSurveysDelegate = self
-        
-        let filter = InBrainSurveyFilter(placementId: "76f52733-62e0-4b0d-bb62-72ebf1b42edf",
-                                         categories: [.business],
-                                         excludedCategories: nil)
-        inBrain.getNativeSurveys(filter: filter)
+    
+        inBrain.getNativeSurveys(filter: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,6 +52,14 @@ class NativeSurveysViewController: UIViewController, LoadableView {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(
+            alongsideTransition: { [weak self] _ in
+                self?.collectionView?.collectionViewLayout.invalidateLayout()
+            }, completion: { _ in })
+    }
 }
 
 //MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -78,7 +83,8 @@ extension NativeSurveysViewController: UICollectionViewDelegate, UICollectionVie
 extension NativeSurveysViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = (UIScreen.main.bounds.width - 36) / 2
+        let safeAreaInsets = view.safeAreaInsets.left + view.safeAreaInsets.right
+        let cellWidth = (UIScreen.main.bounds.width - safeAreaInsets - 36) / 2
         return .init(width: cellWidth, height: 149)
     }
 }
@@ -127,12 +133,15 @@ extension NativeSurveysViewController: NativeSurveyCellDelegate {
     func onStartPressed(at cell: NativeSurveyCollectionViewCell) {
         guard let ip = collectionView?.indexPath(for: cell) else { return }
         
+        // Value to track each user session. This value is provided via S2S Callbacks as SessionId.
+        inBrain.setSessionID("TestSessionID")
+        
         let survey = surveys[ip.row]
-        inBrain.showNativeSurvey(survey, from: self)
+        inBrain.openSurvey(survey, offersEnabled: false, from: self)
         
         /*
             Another option to show selected survey - is to use method
-            inBrain.showNativeSurveyWith(id: searchId: from: )
+            inBrain.openSurvey(id:searchId:offersEnabled:from:)
          
             Both options are valid and works the same `underhood`. Pls, use option you prefer
         */

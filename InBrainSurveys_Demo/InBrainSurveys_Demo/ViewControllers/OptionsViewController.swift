@@ -22,40 +22,39 @@ class OptionsViewController: UIViewController, LoadableView {
         setupInBrain()
         updatePoints()
         checkForCurrencySale()
+
     }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-    
-    //MARK: - IBActions     
-    @IBAction func showInBrain(_ sender: UIButton) {
-        startActivity()
-        view.isUserInteractionEnabled = false
-        MessagePresenter.shared.show(message: "Loading Surveys", type: .loading)
 
-        inBrain.checkForAvailableSurveys { [weak self] hasSurveys, _  in
-            MessagePresenter.shared.hideAlert()
-            self?.view.isUserInteractionEnabled = true
-            self?.stopActivity()
+    // MARK: - IBActions
 
-            guard hasSurveys else {
-                MessagePresenter.shared.show(message: "Ooops.. No surveys available right now!", type: .error)
-                return
-            }
-
-            self?.inBrain.showSurveys()
-        }
+    @IBAction func openSurveyWallPressed(_ sender: UIButton) {
+        MessagePresenter.shared.hideAlert()
+        inBrain.openWall(with: .all)
     }
 
-    @IBAction func showNativeSurveys(_ sender: UIButton) {
+    @IBAction func showNativeSurveysPressed(_ sender: UIButton) {
         performSegue(withIdentifier: "toNativeSurveys", sender: nil)
     }
+    
+    @IBAction func showNativeOffersPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "toNativeOffers", sender: nil)
+    }
+
+    // MARK: - Different
+    func checkForCurrencySale() {
+        inBrain.getCurrencySale(success: { [weak self] sale in self?.showCurrencySale(sale) },
+                                failed: { MessagePresenter.shared.show(error: $0) })
+    }
+
 }
 
-//MARK: - InBrainDelegate
-//All the methods are optional
+// MARK: - InBrainDelegate
+// All the methods are optional
 extension OptionsViewController: InBrainDelegate {
     func didFailToReceiveRewards(error: Error) {
         MessagePresenter.shared.show(message: "Ooops.. Something went wrong", type: .error)
@@ -94,12 +93,9 @@ private extension OptionsViewController {
         inBrain.inBrainDelegate = self
 
         //--- Optional config ---
-
+        
         //If no userId set - `identifierForVendor` will be used.
         inBrain.set(userID: "Uniq identifier of the user within your application")
-
-        // Value to track each user session. This value is provided via S2S Callbacks as SessionId.
-        inBrain.setSessionID("testing33_Session")
         
         //Customize Navigation Bar
         //Example to match InBrain V2 theme (Native Surveys)
@@ -123,13 +119,11 @@ private extension OptionsViewController {
         pointsLabel?.text = String(format: "Total Points: %.0f", totalPoints)
     }
 
-    func checkForCurrencySale() {
-        inBrain.getCurrencySale(success: { [weak self] sale in self?.showCurrencySale(sale) },
-                                failed: { MessagePresenter.shared.show(error: $0) })
-    }
-
     func showCurrencySale(_ sale: InBrainCurrencySale?) {
-        guard let sale else { return }
+        guard let sale else {
+            setCurrencySale(alpha: 0)
+            return
+        }
 
         // Rounding to 1 digit after comma
         let multiplier = "\((sale.multiplier * 10).rounded() / 10)x"
@@ -145,9 +139,12 @@ private extension OptionsViewController {
         }
 
         currencySaleLabel?.attributedText = attributedString
-
+        setCurrencySale(alpha: 1)
+    }
+    
+    func setCurrencySale(alpha: CGFloat) {
         UIView.animate(withDuration: 0.3) { [weak self] in
-            self?.currencySaleLabel?.alpha = 1
+            self?.currencySaleLabel?.alpha = alpha
         }
     }
 }

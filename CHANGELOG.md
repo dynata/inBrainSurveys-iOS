@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0](https://github.com/dynata/inBrainSurveys-iOS/releases/tag/3.0.0) - 2025-05-10
+
+### Added
+- **Native Offers Support:**
+    - `InBrainNativeOffer` - class representing a native offer
+    - `InBrainOfferFilter` - class for filtering native offers
+    - `InBrainOfferType` - enum used to specify which offers to fetch from API using the filter
+    - `InBrainOfferGoal` - class representing offer goals
+    - `InBrainOfferPromotion` - class representing offer promotions
+    - `getNativeOffers(filter:success:failed:)` function to `InBrain` for fetching native offers
+    - `openOfferWith(id:success:failed:)` function to `InBrain` for opening specific offers
+- **New Survey Functions:**
+    - `openSurvey(_ survey: InBrainNativeSurvey, offersEnabled: Bool, from viewController: UIViewController? = nil)` function to `InBrain`
+    - `openSurveyWith(id surveyId: String, searchId: String, offersEnabled: Bool, from viewController: UIViewController? = nil)` function to `InBrain`
+
+### Changed
+- Refactored internal API and authentication layers for better performance and stability
+
+### Deprecated
+- `setInBrain(apiClientID:apiSecret:isS2S:userID:)` - use `setInBrain(apiClientID:apiSecret:isS2S:)` followed by `set(userID:)` instead
+- `showNativeSurvey(_ survey: InBrainNativeSurvey, offersEnabled: Bool, from viewController: UIViewController? = nil)` - use `openSurvey(survey:offersEnabled:from:)` instead
+- `showNativeSurveyWith(id surveyId: String, searchId: String, offersEnabled: Bool, from viewController: UIViewController? = nil)` - use `openSurveyWith(id:searchId:offersEnabled:from:)` instead
+
+### Removed
+- **Functions:**
+    - `setLanguage(_:)` function
+    - `showSurveys(from viewController: UIViewController? = nil)` - use `openWall(with:)` instead
+    - `showNativeSurvey(_ survey: InBrainNativeSurvey, from viewController: UIViewController? = nil)` - use `showNativeSurvey(survey:offersEnabled:from:)` instead
+    - `showNativeSurveyWith(id surveyId: String, searchId: String, from viewController: UIViewController? = nil)` - use `showNativeSurveyWith(id:searchId:offersEnabled:from:)` instead
+    - `setInBrainValuesFor(sessionID:, dataOptions:)` - use `setSessionID(_:)` and `setDataOptions(_:)` instead
+    - `getNativeSurveys(placementId: String?)` - use `getNativeSurveys(filter:)` instead
+    - `getNativeSurveys(placementID: String?, success:, failed:)` - use `getNativeSurveys(filter:success:failed:)` instead
+    - `surveysClosed(byWebView: Bool, completedSurvey: Bool)` function of `InBrainDelegate` - use `surveysClosed(byWebView:completedSurvey:rewards:)` instead
+    - `surveysClosedFromPage()` from `InBrainDelegate`
+    - `surveysClosed()` (no parameters version) from `InBrainDelegate`
+    - `nativeSurveysLoadingStarted()` from `NativeSurveyDelegate`
+    - `nativeSurveysLoadingStarted(placementId: String?)` from `NativeSurveyDelegate`
+    - `nativeSurveysReceived(_ surveys: [InBrainNativeSurvey])` from `NativeSurveyDelegate`
+    - `nativeSurveysReceived(_ surveys: [InBrainNativeSurvey], placementId: String?)` from `NativeSurveyDelegate`
+    - `failedToReceiveNativeSurveys(error: Error)` from `NativeSurveyDelegate`
+    - `failedToReceiveNativeSurveys(error: Error, placementId: String?)` from `NativeSurveyDelegate`
+    
+- **Properties:**
+    - `profileMatch` property of `InBrainNativeSurvey`
+    - `SurveyProfileMatch` enum
+    - `start` property of `InBrainCurrencySale` - use `startOn` instead
+    - `end` property of `InBrainCurrencySale` - use `endOn` instead
+    
+
 ## [2.5.1](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/2.5.1) - 2025-24-03
 
 ### Changed
@@ -21,10 +70,10 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 - `showNativeSurvey(_ survey: InBrainNativeSurvey, offersEnabled: Bool, from viewController: UIViewController? = nil)` function to `InBrain`;
 - `showNativeSurveyWith(id surveyId: String, searchId: String, offersEnabled: Bool, from viewController: UIViewController? = nil)` function to `InBrain`.
 
-### Changed
-- `showSurveys(from viewController: UIViewController? = nil)` function deprecated;
-- `showNativeSurvey(_ survey: InBrainNativeSurvey, from viewController: UIViewController? = nil)` function deprecated;
-- `showNativeSurveyWith(id surveyId: String, searchId: String, from viewController: UIViewController? = nil)` function deprecated.
+### Deprecated
+- `showSurveys(from viewController: UIViewController? = nil)` function;
+- `showNativeSurvey(_ survey: InBrainNativeSurvey, from viewController: UIViewController? = nil)` function;
+- `showNativeSurveyWith(id surveyId: String, searchId: String, from viewController: UIViewController? = nil)` function.
 
 ## [2.4.3](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/2.4.3) - 2024-09-17
 
@@ -73,24 +122,21 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 ## [2.2.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/2.2.0) - 2023-01-02
 
 ### Added
--  `surveysClosed(byWebView: Bool, completedSurvey: Bool, rewards: [InBrainSurveyReward]?)` function to `InBrainDelegate`;
+- `surveysClosed(byWebView: Bool, completedSurvey: Bool, rewards: [InBrainSurveyReward]?)` function to `InBrainDelegate`;
 - `InBrainSurveyReward` class, which represents information about completed survey and earned reward.
 
-### Changed
-- `surveysClosed(byWebView: Bool, completedSurvey: Bool)` function deprecated.
----
+### Deprecated
+- `surveysClosed(byWebView: Bool, completedSurvey: Bool)` function.
 
 ## [2.1.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/2.1.0) - 2022-12-23
 
 ### Added
--  `conversionLevel` property to `InBrainNativeSurvey` and corresponding `SurveyConversionLevel` enum.
+- `conversionLevel` property to `InBrainNativeSurvey` and corresponding `SurveyConversionLevel` enum.
 
-### Changed
-- `setLanguage(_:)` function deprecated;
-- `setInBrainValuesFor(sessionID:, dataOptions:)` function deprecated in in favour of `setSessionID(_:)` and `setDataOptions(_:)` functions;
-- `profileMatch` property of `InBrainNativeSurvey` and corresponding `SurveyProfileMatch` enum deprecated.
-
----
+### Deprecated
+- `setLanguage(_:)` function;
+- `setInBrainValuesFor(sessionID:, dataOptions:)` function in favour of `setSessionID(_:)` and `setDataOptions(_:)` functions;
+- `profileMatch` property of `InBrainNativeSurvey` and corresponding `SurveyProfileMatch` enum.
 
 ## [2.0.1](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/2.0.1) - 2022-12-15
 
@@ -100,7 +146,6 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 - Bitcode.
----
 
 ## [2.0.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/2.0.0) - 2022-10-27
 
@@ -122,49 +167,43 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 - iOS 11 support.
----
 
 ## [1.8.7](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.7) - 2022-07-08
 
 ### Changed
 - `SurveyProfileMatch` values updated.
----
 
 ## [1.8.6](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.6) - 2022-06-30
 
 ### Added
 - `SurveyProfileMatch` enum, which indicates how the surveys matches to the user's profile;
 - `profileMatch` property to NativeSurvey object.
----
 
 ## [1.8.5](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.5) - 2022-03-25
-
-### Fixed
-- `.swiftsourceinfo` warning when building for simulators.
 
 ### Added
 - Get active `Currency Sale`.
 
-### Removed 
+### Fixed
+- `.swiftsourceinfo` warning when building for simulators.
+
+### Removed
 - arm64 arch for simulators;
 - Xcode 12 support.
----
 
 ## [1.8.4](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.4) - 2022-03-04
 
 ### Fixed
 - Loading indicator wasn't hidden at some screens.
 
-### Removed 
+### Removed
 - iOS 10 support;
 - Xcode 11 support.
----
 
 ## [1.8.3](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.3) - 2022-01-20
 
 ### Fixed
 - `placementId` decoding for NativeSurveys.
----
 
 ## [1.8.2](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.2) - 2021-12-07
 
@@ -173,7 +212,6 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - `surveyCompleted` flag for profiler survey.
----
 
 ## [1.8.1](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.1) - 2021-10-14
 
@@ -181,8 +219,7 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 - `placementId` to NativeSurveyDelegate methods.
 
 ### Fixed
-- archive with bitcode. 
----
+- archive with bitcode.
 
 ## [1.8.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.8.0) - 2021-09-23
 
@@ -194,51 +231,43 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 - Wrong language/postcode detection bug;
 - Loading indicator wasn't hidden at some screens. 
 
-### Removed 
+### Removed
 - Deprecated methods.
----
 
 ## [1.7.3](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.7.3) - 2021-06-10
 
 ### Fixed
 - iOS 15.0 beta 1 navigation bar translucent bug
----
 
 ## [1.7.2](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.7.2) - 2021-05-05
 
 ### Fixed
 - Surveys availability for US users
----
 
 ## [1.7.1](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.7.1) - 2021-04-29
 
 ### Fixed
 - Hide activity indicator after survey completed.
----
 
 ## [1.7.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.7.0) - 2021-03-31
 
 ### Added
 - Catalyst support (macOS 10.15.1 and above).
----
 
 ## [1.6.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.6.0) - 2021-02-26
 
 ### Added
 - Landscape mode.
----
 
 ## [1.5.2](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.5.2) - 2021-01-20
 
 ### Fixed
 - Return no surveys in case of `timeout` error for `Native Surveys` request.
----
 
 ## [1.5.1](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.5.1) - 2021-01-15
 
 ### Fixed
 - Hide activity indicator after `Profiler` survey loaded.
----
 
 ## [1.5.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.5.0) - 2021-01-13
 
@@ -247,19 +276,16 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Open redirects and links at new window.
----
 
 ## [1.4.12](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.12) - 2020-12-11
 
 ### Fixed
 - Environment variables hotfix.
----
 
 ## [1.4.11](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.11) - 2020-12-11
 
 ### Added
 - Request feedback if survey closed by user.
----
 
 ## [1.4.10](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.10) - 2020-12-04
 
@@ -268,7 +294,6 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Updates from previous releases, which were lost by merge issue.
----
 
 ## [1.4.9](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.9) - 2020-12-03
 
@@ -277,7 +302,6 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Navigation's bar shadow.
----
 
 ## [1.4.8](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.8) - 2020-12-02
 
@@ -289,7 +313,6 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - `Native Survey` reopening after user pressed `Back` at the `Native Survey`.
----
 
 ## [1.4.7](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.7) - 2020-12-01
 
@@ -300,25 +323,21 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - `Native Survey` reopening after user pressed `Back` at the `Native Survey`.
----
 
 ## [1.4.6](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.6) - 2020-11-11
 
 ### Added
 - Get `Native Surveys` with callbacks.
----
 
 ## [1.4.5](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.5) - 2020-11-09
 
 ### Fixed
 - Reload `Native Surveys` if some were completed.
----
 
 ## [1.4.4](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.4) - 2020-10-29
 
 ### Fixed
 - Minor fixes and improvements.
----
 
 ## [1.4.3](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.3) - 2020-10-26
 
@@ -328,7 +347,6 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Use `IDFV` for API requests in case if `user_id `not set or empty;
 - Deprecation marks.
----
 
 ## [1.4.2](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.2) - 2020-10-21
 
@@ -342,14 +360,12 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Get rewards after `Profiler` survey;
 - Portrait orientation for `WKWebView` if app supports landscape-only.
----
 
 ## [1.4.1](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.1) - 2020-10-16
 
 ### Fixed
 - `WKWebView` orientation;
 - Demo app minor fixes and improvements.
----
 
 ## [1.4.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/1.4.0) - 2020-10-13
 
@@ -364,7 +380,6 @@ and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Portrait orientation for `WKWebView`;
 - Minor fixes and improvements.
----
 
 ## [1.3.5](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/v1.3.5) - 2020-09-25
  
