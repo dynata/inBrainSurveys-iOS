@@ -23,22 +23,6 @@
 		</dict>
 		<dict>
 			<key>BinaryPath</key>
-			<string>InBrainSurveys.framework/InBrainSurveys</string>
-			<key>DebugSymbolsPath</key>
-			<string>dSYMs</string>
-			<key>LibraryIdentifier</key>
-			<string>ios-arm64</string>
-			<key>LibraryPath</key>
-			<string>InBrainSurveys.framework</string>
-			<key>SupportedArchitectures</key>
-			<array>
-				<string>arm64</string>
-			</array>
-			<key>SupportedPlatform</key>
-			<string>ios</string>
-		</dict>
-		<dict>
-			<key>BinaryPath</key>
 			<string>InBrainSurveys.framework/Versions/A/InBrainSurveys</string>
 			<key>DebugSymbolsPath</key>
 			<string>dSYMs</string>
@@ -55,6 +39,22 @@
 			<string>ios</string>
 			<key>SupportedPlatformVariant</key>
 			<string>maccatalyst</string>
+		</dict>
+		<dict>
+			<key>BinaryPath</key>
+			<string>InBrainSurveys.framework/InBrainSurveys</string>
+			<key>DebugSymbolsPath</key>
+			<string>dSYMs</string>
+			<key>LibraryIdentifier</key>
+			<string>ios-arm64</string>
+			<key>LibraryPath</key>
+			<string>InBrainSurveys.framework</string>
+			<key>SupportedArchitectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>SupportedPlatform</key>
+			<string>ios</string>
 		</dict>
 	</array>
 	<key>CFBundlePackageType</key>
