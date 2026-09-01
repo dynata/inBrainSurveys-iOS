@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.3](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/3.0.3) - 2026-09-01
+
+### Changed
+- Improved `Missing session` error handling
+
+### Added
+- New `InBrainNativeOffer` fields: `instructions`, `requirements`, `tags`, `attributionWindowMinutes`, `attemptedAt`, `completeBy`, `campaignCurrencySale`
+
 ## [3.0.2](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/3.0.2) - 2026-08-11
 
 ### Fixed
