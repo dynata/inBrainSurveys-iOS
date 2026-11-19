@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and `InBrainSurveys` adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/3.1.0) - 2026-11-19
+
+### Added
+- **Native Offers:**
+    - `InBrainOfferBannerAd` - class representing an offer banner ad (`header`, `buttonText`, `bannerDescription`)
+    - New `InBrainNativeOffer` fields: `bannerAd`, `status`, `isCompleted`, `platforms`
+    - New `InBrainOfferGoal` field: `isPending`
+- **Currency Sale:**
+    - `InBrainCurrencySaleType` - enum to specify the currency sale type (`.surveys` or `.offers`)
+    - `getCurrencySale(for:success:failed:)` function to `InBrain` for fetching Surveys or Offers currency sale
+
+### Deprecated
+- `getCurrencySale(success:failed:)` - use `getCurrencySale(for:success:failed:)` instead
+
 ## [3.0.3](https://github.com/inbrainai/inBrainSurveys_SDK/releases/tag/3.0.3) - 2026-09-01
 
 ### Changed

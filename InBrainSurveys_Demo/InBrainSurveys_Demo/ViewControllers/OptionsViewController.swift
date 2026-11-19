@@ -47,7 +47,8 @@ class OptionsViewController: UIViewController, LoadableView {
 
     // MARK: - Different
     func checkForCurrencySale() {
-        inBrain.getCurrencySale(success: { [weak self] sale in self?.showCurrencySale(sale) },
+        inBrain.getCurrencySale(for: .surveys,
+                                success: { [weak self] sale in self?.showCurrencySale(sale) },
                                 failed: { MessagePresenter.shared.show(error: $0) })
     }
 
